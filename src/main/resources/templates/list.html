@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <title>Lux Car Rentals</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.css}">
+
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">Lux<em> Car Rentals</em></a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/register">Register</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<section class="section section-bg" id="call-to-action" th:style="'background: url(/assets/images/banner-image-1-1920x500.jpg)'">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cta-content">
+                    <br>
+                    <br>
+                    <h2>Lux <em>Car Rentals</em></h2>
+                    <p>Find the perfect car for you fast and easy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ***** Our Classes Start ***** -->
+<section class="section" id="our-classes">
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <div class="row" id="tabs">
+            <div>
+
+                    <div>
+                        <!-- The form below should invoke the method CarController.showProducts -->
+                        <form id="filter-form">
+
+                            <label for="modelSearch">Model</label>
+                            <input id="modelSearch" type="text" name="modelSearch"/>
+                            <label for="categoryId">Category</label>
+                            <select id="categoryId" name="categoryId">
+                                <option value="">All</option>
+                                <!-- For each category you should have one <option> like below  -->
+                                <option th:each="cat: ${categories}" th:value="${cat.id}" th:text="${cat.name}"> [cat.name]</option>
+                            </select>
+                            <button id="filter" type="submit">Filter</button>
+                        </form>
+                        <br>
+                        <div>
+                            <!-- CarController.showAdd -->
+                            <a href="/cars/add" class="add-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                                Add new car
+                            </a>
+                        </div>
+                        <br>
+                        <table width="1200px">
+                            <tr>
+                                <th>Car Model</th>
+                                <th>Price Per Day</th>
+                                <th>Year Of Production</th>
+                                <th>Category</th>
+                                <th>Manufacturer</th>
+                                <th>Owner</th>
+                                <th>Availability</th>
+                                <th>Actions</th>
+                            </tr>
+                            <!-- For each product you should have one <tr> like below -->
+                            <tr class="item" th:each="car: ${cars}">
+                                <td th:text="${car.model}">[car.model]</td>
+                                <td th:text="${car.pricePerDay}">[car.pricePerDay]</td>
+                                <td th:text="${car.yearOfProduction}">[car.yearOfProduction]</td>
+                                <td>
+                                    <ul>
+                                        <!-- For each product's category you should display one <li> element like the one below -->
+                                        <li th:each="cat: ${car.categories}" th:text="${cat.name}">[cat.name]</li>
+                                    </ul>
+                                </td>
+                                <td th:text="${car.manufacturer?.name}">[car.manufacturer.name]</td>
+                                <td th:text="${car.creator?.username}">[car.creator.username]</td>
+                                <td th:text="${car.availability}">[car.availability]</td>
+
+                                <td>
+                                    <!-- CarController.delete -->
+                                    <form method="POST" th:action="@{'/cars/{id}/delete' (id=${car.getId()})}" sec:authorize="hasRole('ROLE_ADMIN')">
+                                        <button type="submit" class="delete-item">Delete</button>
+                                    </form>
+                                    <!-- CarController.showEdit -->
+                                    <a th:href="@{'/cars/{id}/edit' (id=${car.getId()})}" class="edit-item" sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Our Classes End ***** -->
+
+<!-- ***** Call to Action Start ***** -->
+<section class="section section-bg" id="call-to-action">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cta-content">
+                    <h2>Send us a <em>message</em></h2>
+                    <p>We are here for you 24/7! If you are interested in renting our available cars reach out to
+                    us and we'll get you driving it as soon as possible.</p>
+                    <div class="main-button">
+                        <a href="#">Contact us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Call to Action End ***** -->
+
+<!-- ***** Footer Start ***** -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p>
+                    Copyright © 2022 Lux Car Rentals
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script th:src="@{/assets/js/jquery-2.1.0.min.js}"></script>
+
+<!-- Bootstrap -->
+<script th:src="@{/assets/js/popper.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+
+<!-- Plugins -->
+<script th:src="@{/assets/js/scrollreveal.min.js}"></script>
+<script th:src="@{/assets/js/waypoints.min.js}"></script>
+<script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+<script th:src="@{/assets/js/imgfix.min.js}"></script>
+<script th:src="@{/assets/js/mixitup.js}"></script>
+<script th:src="@{/assets/js/accordions.js}"></script>
+
+<!-- Global Init -->
+<script th:src="@{/assets/js/custom.js}"></script>
+
+</body>
+</html>
+
